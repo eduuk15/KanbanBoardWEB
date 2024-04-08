@@ -1,2 +1,12 @@
-# KanbanBoardWEB
-Repositório criado para organizar e desenvolver o projeto da disciplina de programação para WEB durante o semestre 24.1 da Universidade Federal de Santa Catarina (UFSC) 
+# OVERVIEW
+Repositório criado para organizar e desenvolver o projeto da disciplina de programação para WEB durante o semestre 24.1 da Universidade Federal de Santa Catarina (UFSC).
+Neste projeto, desenvolveremos um Kanban Board a partir de diferentes tecnologias e linguagens de programação. 
+Em conjunto com o restante da equipe, definimos o uso de React + TypeScript para o front-end, Python para o back-end e PostgreSQL para o banco de dados.
+
+# AO LONGO DO DESENVOLVIMENTO OUTRAS INFORMAÇÕES CONSTARÃO NESTE README
+
+# TEAM
+Eduardo Knopp (23103713)
+Igor Ferreira Fonseca (23103128)
+Pedro Henrique Colla (23100744)
+Rafael Bleyer Zanette Furtado ()
