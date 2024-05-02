@@ -14,4 +14,4 @@ from backend.api.models.task import Task
 Base.metadata.create_all(bind=engine)
 
 # Inclui as rotas definidas no router de tarefas
-app.include_router(task_router)
+app.include_router(task_router, prefix='/tasks', tags=['tasks'])
