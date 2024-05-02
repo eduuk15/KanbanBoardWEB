@@ -5,7 +5,7 @@ from backend.database.base import Base
 from backend.database.engine import engine
 from backend.api.routes.task import router as task_router
 
-app = FastAPI()
+app = FastAPI()dasda
 
 # Importa todos os modelos de dados que deseja criar tabelas
 from backend.api.models.task import Task
