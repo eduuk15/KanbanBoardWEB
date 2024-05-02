@@ -7,7 +7,7 @@ from backend.api.routes.task import router as task_router
 
 app = FastAPI()
 
-# Importa todos os modelos de dados que deseja criar tabelas
+# Importa todos os modelos de dados que deseja criar tabelasrewrw
 from backend.api.models.task import Task
 
 # Cria todas as tabelas definidas nos modelos de dados
