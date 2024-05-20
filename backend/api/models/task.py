@@ -7,7 +7,8 @@ from backend.database.base import Base
 class Task(Base):
     __tablename__ = "tasks"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    status = Column(String, index=True)
+    id: int = Column(Integer, primary_key=True)
+    title: str = Column(String, index=True)
+    description: str = Column(String, index=True)
+    status: str = Column(String, index=True)
+    #user_responsible: str = Column(String, index=True)

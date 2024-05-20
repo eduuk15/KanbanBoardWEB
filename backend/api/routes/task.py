@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.api.models.task import Task
 from backend.database.session import get_db
+from sqlalchemy import select
 
 router = APIRouter()
 
@@ -13,3 +14,9 @@ async def create_task(task_data: dict, db: Session = Depends(get_db)):
     db.add(task)
     db.commit()
     return {"message": "Task created successfully"}
+
+@router.get("/{id}")
+async def get_task(id: int, db: Session = Depends(get_db)):
+    task = db.query(Task).filter(Task.id == id)
+    
+    return task.count()
