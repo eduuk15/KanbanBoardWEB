@@ -52,7 +52,7 @@ const BoardPage: React.FC = () => {
     setTimeout(() => {
       setCards(mockCards);
       setLoading(false);
-    }, 1000);
+    }, 1001);
   }, []);
 
   const columns = [
