@@ -2,7 +2,6 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from backend.api.models.task import Task
 from backend.database.session import get_db
 from sqlalchemy import select
 
