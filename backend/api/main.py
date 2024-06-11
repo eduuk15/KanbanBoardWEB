@@ -1,6 +1,6 @@
 # backend/main.py
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from backend.database.models import Base
 from backend.database.engine import engine
 from backend.api.routes.task import router as task_router
