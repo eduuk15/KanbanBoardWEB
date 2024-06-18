@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Input from "../../components/common/Input";
 import Button from "../../components/common/Button";
 
-const Login = () => {
+const RegisterUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
-  const navigate = useNavigate(); // Usando useNavigate para navegação
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { register } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    // Adicione aqui a lógica para chamar a API de autenticação e obter o token
-    const token = "fake-token"; // Substitua pelo token real obtido da API
-    login(token);
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    register(email, password);
   };
 
   return (
@@ -23,7 +25,7 @@ const Login = () => {
         <div className="flex justify-center mb-6">
           <img src="/Kanban-Board.png" alt="Logo" className="h-20" />
         </div>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
           <Input
             id="email"
             label="Usuário/Email"
@@ -38,16 +40,15 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div className="flex justify-between items-center mb-4">
-            <Button type="submit">Login</Button>
-            <Button type="button" onClick={() => navigate("/forgot-password")}>
-              Esqueceu a senha?
-            </Button>
-          </div>
-          <div className="flex justify-center">
-            <Button type="button" onClick={() => navigate("/register-user")}>
-              Cadastrar Novo
-            </Button>
+          <Input
+            id="confirm-password"
+            label="Confirme a Senha"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <div className="flex justify-center mt-4">
+            <Button type="submit">Registrar</Button>
           </div>
         </form>
       </div>
@@ -55,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default RegisterUser;
