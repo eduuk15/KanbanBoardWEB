@@ -1,5 +1,3 @@
-# backend/api/routes/task.py
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.api.models.task import Task
