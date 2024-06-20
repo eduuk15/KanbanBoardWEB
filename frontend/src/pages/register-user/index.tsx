@@ -1,22 +1,45 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
 import Input from "../../components/common/Input";
 import Button from "../../components/common/Button";
+import { registerUser } from "../../api/users";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
 
 const RegisterUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { register } = useAuth();
+  const [confirmationQuestion, setConfirmationQuestion] = useState("");
+  const [confirmationAnswer, setConfirmationAnswer] = useState("");
+  const { login } = useAuth();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      toast.warning("As senhas não coincidem!");
       return;
     }
 
-    register(email, password);
+    if (!confirmationQuestion || !confirmationAnswer) {
+      toast.warning(
+        "Por favor, preencha a pergunta e a resposta de confirmação."
+      );
+      return;
+    }
+
+    const response = await registerUser(
+      email,
+      password,
+      confirmationQuestion,
+      confirmationAnswer
+    );
+
+    if (response.error) {
+      toast.error(response.error);
+    } else {
+      toast.success(response.message);
+      login(response.access_token);
+    }
   };
 
   return (
@@ -46,6 +69,33 @@ const RegisterUser = () => {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <div className="mt-4">
+            <label
+              htmlFor="confirmation-question"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Pergunta de Confirmação
+            </label>
+            <select
+              id="confirmation-question"
+              value={confirmationQuestion}
+              onChange={(e) => setConfirmationQuestion(e.target.value)}
+              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option value="">Selecione uma pergunta</option>
+              <option value="1">Qual é/foi o nome do seu primeiro pet?</option>
+              <option value="2">Onde você cursou o ensino médio?</option>
+              <option value="3">Qual é o nome do meio da sua mãe?</option>
+            </select>
+          </div>
+          <Input
+            id="confirmation-answer"
+            label="Resposta"
+            type="text"
+            value={confirmationAnswer}
+            onChange={(e) => setConfirmationAnswer(e.target.value)}
+            className="mt-4"
           />
           <div className="flex justify-center mt-4">
             <Button type="submit">Registrar</Button>

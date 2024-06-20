@@ -2,6 +2,7 @@ import { FaUserAlt } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "../User/types";
+import { getUsers } from "../../api/users";
 
 const Header = () => {
   const [user, setUser] = useState<UserData | null>(null); // Estado para armazenar as informações do usuário
@@ -79,7 +80,7 @@ const Header = () => {
                 <ul>
                   <li
                     className="py-2 px-4 hover:bg-gray-700 cursor-pointer"
-                    onClick={() => alert("Editar usuário")}
+                    onClick={getUsers}
                   >
                     Editar usuário
                   </li>

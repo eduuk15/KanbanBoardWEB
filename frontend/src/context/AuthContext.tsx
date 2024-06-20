@@ -5,7 +5,6 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
-  register: (email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,11 +15,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
-  const navigate = useNavigate(); // Adiciona useNavigate para redirecionamento
+  const navigate = useNavigate();
 
   const login = (token: string) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
+    navigate("/board");
   };
 
   const logout = () => {
@@ -29,32 +29,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     navigate("/login");
   };
 
-  const register = async (email: string, password: string) => {
-    try {
-      // Chama a API de registro e obtém o token
-      // const response = await fetch("https://api.exemplo.com/register", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ email, password }),
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error("Erro ao registrar");
-      // }
-
-      // const data = await response.json();
-      // const token = data.token;
-
-      login("token");
-    } catch (error) {
-      console.error("Erro durante o registro:", error);
-    }
-  };
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, register }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
