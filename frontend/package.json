@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.2.25",
     "aws-sdk": "^2.1639.0",
     "axios": "^1.7.2",
+    "jwt-decode": "^4.0.0",
     "multer": "^2.0.0-rc.4",
     "multer-s3": "^3.0.1",
     "react": "^18.2.0",

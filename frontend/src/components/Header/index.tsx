@@ -1,23 +1,27 @@
 import { FaUserAlt } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { UserData } from "../User/types";
 import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [user, setUser] = useState<UserData | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const mockUser = {
-    name: "Usuário Exemplo",
-    profilePicture: "",
-    isAdmin: true,
-  };
-
   useEffect(() => {
-    setUser(mockUser);
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedUser = jwtDecode<UserData>(token);
+        setUser(decodedUser);
+      } catch (error) {
+        console.error("Erro ao decodificar o token", error);
+      }
+    }
   }, []);
 
   const toggleDropdown = () => {
@@ -47,7 +51,7 @@ const Header = () => {
         >
           Grupos
         </span>
-        {user && user.isAdmin && (
+        {user && isAdmin && (
           <span
             className="hover:text-gray-400 cursor-pointer"
             onClick={() => handleNavigation("/users")}
@@ -65,7 +69,7 @@ const Header = () => {
             className="flex items-center cursor-pointer"
             onClick={toggleDropdown}
           >
-            {user.profilePicture ? (
+            {/* {user.profilePicture ? (
               <img
                 src={user.profilePicture}
                 alt="Profile"
@@ -73,7 +77,7 @@ const Header = () => {
               />
             ) : (
               <FaUserAlt className="w-8 h-8 rounded-full mr-2" />
-            )}
+            )} */}
             <span>{user.name}</span>
             {dropdownOpen && (
               <div className="absolute right-0 top-full mt-2 w-48 bg-gray-800 border border-gray-200 rounded shadow-lg">

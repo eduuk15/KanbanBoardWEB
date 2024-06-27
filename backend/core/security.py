@@ -22,12 +22,8 @@ def create_access_token(data: dict, expires_delta: timedelta):
 
 def read_access_token(token: str) -> Optional[int]:
     try:
-        print('token')
-        print(token)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: int = payload.get("id")
-        print('user_id')
-        print(user_id)
         return user_id
     except JWTError:
         return None
