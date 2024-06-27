@@ -2,16 +2,19 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.api.models.user import User
 from backend.database.session import get_db
-from backend.core.security import create_access_token  # Função para criar o token JWT
-from datetime import timedelta  # Opcional: para definir a expiração do token
+from backend.core.security import create_access_token
+from datetime import timedelta 
 
 router = APIRouter()
 
 @router.post("/")
-async def login_user(email: str, password: str, db: Session = Depends(get_db)):
+async def login_user(login_req: dict, db: Session = Depends(get_db)):
+    print(login_req)
+    email = login_req['email']
+    password = login_req['password']
     user = db.query(User).filter(User.email == email).first()
     if not user or not user.check_password(password):
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
+        raise HTTPException(status_code=401, detail="Senha e/ou e-mail incorreto(s)")
     
     expires_delta = timedelta(minutes=30)
     access_token = create_access_token(data={"sub": user.id}, expires_delta=expires_delta)

@@ -18,6 +18,9 @@ class User(Base):
     def check_password(self, password: str):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
     
+    def check_security_answer(self, answer: str) -> bool:
+        return str(self.confirmation_answer).lower() == answer.lower()
+    
     @staticmethod
     def generate_password_hash(password: str) -> str:
         hashed_bytes = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())

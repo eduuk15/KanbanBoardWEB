@@ -1,15 +1,15 @@
 import { FaUserAlt } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserData } from "../User/types";
-import { getUsers } from "../../api/users";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
-  const [user, setUser] = useState<UserData | null>(null); // Estado para armazenar as informações do usuário
+  const [user, setUser] = useState<UserData | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
-  // Mockup do usuário
   const mockUser = {
     name: "Usuário Exemplo",
     profilePicture: "",
@@ -25,7 +25,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    // Lógica para logout
+    logout();
   };
 
   const handleNavigation = (path: string) => {
@@ -80,7 +80,7 @@ const Header = () => {
                 <ul>
                   <li
                     className="py-2 px-4 hover:bg-gray-700 cursor-pointer"
-                    onClick={getUsers}
+                    // onClick={handleEditUser}
                   >
                     Editar usuário
                   </li>

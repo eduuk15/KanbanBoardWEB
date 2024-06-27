@@ -70,7 +70,7 @@ const RegisterUser = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <div className="mt-4">
+          <div className="mt-4 mb-4">
             <label
               htmlFor="confirmation-question"
               className="block text-sm font-medium text-gray-700"
@@ -95,7 +95,6 @@ const RegisterUser = () => {
             type="text"
             value={confirmationAnswer}
             onChange={(e) => setConfirmationAnswer(e.target.value)}
-            className="mt-4"
           />
           <div className="flex justify-center mt-4">
             <Button type="submit">Registrar</Button>
