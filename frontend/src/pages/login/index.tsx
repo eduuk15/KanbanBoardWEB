@@ -3,18 +3,36 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Input from "../../components/common/Input";
 import Button from "../../components/common/Button";
+import { loginUser } from "../../api/login";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
-  const navigate = useNavigate(); // Usando useNavigate para navegação
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Adicione aqui a lógica para chamar a API de autenticação e obter o token
-    const token = "fake-token"; // Substitua pelo token real obtido da API
-    login(token);
+
+    try {
+      const response = await loginUser(email, password);
+
+      toast.success("Login realizado com sucesso!");
+      login(response.access_token);
+    } catch (error: any) {
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 401) {
+          toast.error(data.detail);
+        } else {
+          toast.error(`Erro ${status}: ${data.detail}`);
+        }
+      } else {
+        toast.error("Erro ao tentar fazer login. Tente novamente mais tarde.");
+      }
+    }
   };
 
   return (

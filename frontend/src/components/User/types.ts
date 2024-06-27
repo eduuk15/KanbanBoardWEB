@@ -1,5 +1,8 @@
 export interface UserData {
+  id: number;
   name: string;
-  profilePicture: string;
-  isAdmin: boolean;
+  email: string;
+  password: string;
+  confirmation_question: string;
+  confirmation_answer: string;
 }
