@@ -37,9 +37,8 @@ async def get_user(user_id: int, db: Session = Depends(get_db)):
 
 @router.get("/")
 async def get_all_users(current_user: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    print(current_user)
     if current_user is None:
         raise HTTPException(status_code=401, detail="Unauthorized")
-
+    
     users = db.query(User).all()
     return users
