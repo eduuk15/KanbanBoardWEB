@@ -20,9 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from backend.api.models.task import Task
-from backend.api.models.user import User
-
 Base.metadata.create_all(bind=engine)
 
 app.include_router(task_router, prefix='/tasks', tags=['tasks'])
