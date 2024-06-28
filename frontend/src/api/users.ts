@@ -55,3 +55,27 @@ export const changeUserPassword = async (
     throw error;
   }
 };
+
+export const updateUser = async (
+  id: number,
+  email: string,
+  name: string,
+  password: string,
+  confirmationQuestion: string,
+  confirmationAnswer: string,
+  avatar: string
+) => {
+  try {
+    const response = await axiosInstance.put(`/users/${id}`, {
+      email: email,
+      name: name,
+      password: password,
+      confirmation_question: confirmationQuestion,
+      confirmation_answer: confirmationAnswer,
+      avatar: avatar,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

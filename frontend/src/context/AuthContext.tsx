@@ -1,10 +1,13 @@
+import { jwtDecode } from "jwt-decode";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserData } from "../components/User/types";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
+  loggedUserInfo: () => UserData | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,8 +32,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     navigate("/login");
   };
 
+  const loggedUserInfo = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        console.log(jwtDecode<UserData>(token));
+        return jwtDecode<UserData>(token);
+      } catch (error) {
+        console.error("Erro ao decodificar o token", error);
+      }
+    }
+    return null;
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, login, logout, loggedUserInfo }}
+    >
       {children}
     </AuthContext.Provider>
   );

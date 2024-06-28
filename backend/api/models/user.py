@@ -11,6 +11,7 @@ class User(Base):
     password = Column(String)
     confirmation_question = Column(Enum('1', '2', '3', name='confirmation_question_enum')) 
     confirmation_answer = Column(String)
+    avatar = Column(Enum('1', '2', '3', '4', '5', '6', '7', '8', name='avatar_enum'))
 
     def set_password(self, password: str):
         self.password = self.generate_password_hash(password)
