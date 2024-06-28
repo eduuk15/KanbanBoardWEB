@@ -15,15 +15,20 @@ const RegisterUser = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       toast.warning("As senhas não coincidem!");
       return;
     }
 
-    if (!confirmationQuestion || !confirmationAnswer) {
-      toast.warning(
-        "Por favor, preencha a pergunta e a resposta de confirmação."
-      );
+    if (
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !confirmationQuestion ||
+      !confirmationAnswer
+    ) {
+      toast.warning("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
@@ -55,6 +60,7 @@ const RegisterUser = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required={true}
           />
           <Input
             id="password"
@@ -62,6 +68,7 @@ const RegisterUser = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required={true}
           />
           <Input
             id="confirm-password"
@@ -69,6 +76,7 @@ const RegisterUser = () => {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            required={true}
           />
           <div className="mt-4 mb-4">
             <label
@@ -81,7 +89,8 @@ const RegisterUser = () => {
               id="confirmation-question"
               value={confirmationQuestion}
               onChange={(e) => setConfirmationQuestion(e.target.value)}
-              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full py-2 px-3 border border-red-500 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              required
             >
               <option value="">Selecione uma pergunta</option>
               <option value="1">Qual é/foi o nome do seu primeiro pet?</option>
@@ -95,6 +104,7 @@ const RegisterUser = () => {
             type="text"
             value={confirmationAnswer}
             onChange={(e) => setConfirmationAnswer(e.target.value)}
+            required={true}
           />
           <div className="flex justify-center mt-4">
             <Button type="submit">Registrar</Button>

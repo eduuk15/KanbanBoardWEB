@@ -16,6 +16,15 @@ async def login_user(login_req: dict, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Senha e/ou e-mail incorreto(s)")
     
     expires_delta = timedelta(minutes=30)
-    access_token = create_access_token(data={"id": user.id, "email": user.email, "name": user.name}, expires_delta=expires_delta)
-
+    access_token = create_access_token(
+        data={
+            "id": user.id,
+            "email": user.email, 
+            "name": user.name, 
+            "confirmationQuestion": user.confirmation_question, 
+            "confirmationAnswer": user.confirmation_answer,
+            "avatar": user.avatar
+        }, 
+        expires_delta=expires_delta
+    )
     return {"access_token": access_token}
