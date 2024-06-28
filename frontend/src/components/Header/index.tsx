@@ -7,7 +7,6 @@ const Header = () => {
   const { loggedUserInfo } = useAuth();
   const user = loggedUserInfo();
 
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -45,14 +44,6 @@ const Header = () => {
         >
           Grupos
         </span>
-        {user && isAdmin && (
-          <span
-            className="hover:text-gray-400 cursor-pointer"
-            onClick={() => handleNavigation("/users")}
-          >
-            Usuários
-          </span>
-        )}
       </div>
       <div className="absolute left-1/2 transform -translate-x-1/2">
         <img src="/Kanban-Board.png" alt="Logo" className="h-10" />
