@@ -10,6 +10,7 @@ interface InputProps {
   className?: string;
   required?: boolean;
   error?: boolean;
+  disabled?: boolean; // Adicionando a propriedade disabled
 }
 
 const Input = ({
@@ -22,6 +23,7 @@ const Input = ({
   className = "",
   required = false,
   error = false,
+  disabled = false, // Inicializando como falso
 }: InputProps) => {
   const defaultClass =
     "mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500";
@@ -42,6 +44,7 @@ const Input = ({
           error ? errorClass : "border-gray-300"
         }`}
         required={required}
+        disabled={disabled} // Aplicando a propriedade disabled aqui
       />
       {error && (
         <p className="text-red-500 text-xs mt-1">Este campo é obrigatório.</p>
