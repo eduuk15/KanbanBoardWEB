@@ -9,6 +9,14 @@ export const getGroup = async (id: number) => {
   }
 };
 
+export const getGroupInvites = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/groups/invites/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const updateGroup = async (
   id: number,
   name: string,

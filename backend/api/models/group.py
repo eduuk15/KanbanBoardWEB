@@ -21,3 +21,5 @@ class Group(Base):
 
     users = relationship("User", secondary=user_group, back_populates="groups")
     creator = relationship("User", back_populates="created_groups", foreign_keys=[created_by])
+    invites = relationship("Invite", back_populates="group")
+

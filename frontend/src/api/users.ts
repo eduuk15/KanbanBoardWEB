@@ -28,6 +28,15 @@ export const registerUser = async (
   }
 };
 
+export const getUserById = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/users/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getUserByEmail = async (email: string) => {
   try {
     const response = await axiosInstance.get(`/users/by-email/${email}`);

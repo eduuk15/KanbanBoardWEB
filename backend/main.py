@@ -25,6 +25,7 @@ app.add_middleware(
 from backend.api.models.task import Task
 from backend.api.models.user import User
 from backend.api.models.group import Group, user_group
+from backend.api.models.invite import Invite
 
 
 Base.metadata.create_all(bind=engine)

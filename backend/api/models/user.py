@@ -17,6 +17,8 @@ class User(Base):
 
     groups = relationship("Group", secondary=user_group, back_populates="users")
     created_groups = relationship("Group", back_populates="creator", foreign_keys="[Group.created_by]")
+    invites = relationship("Invite", back_populates="user")
+
 
     def set_password(self, password: str):
         self.password = self.generate_password_hash(password)

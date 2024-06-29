@@ -5,8 +5,18 @@ from backend.api.models.group import Group, user_group
 from backend.database.session import get_db
 from backend.core.security import get_current_user
 from backend.api.models.user import User
+from backend.api.models.invite import Invite
 
 router = APIRouter()
+
+@router.get("/invites/{group_id}")
+async def get_group_invites(group_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    group = db.query(Group).filter(Group.id == group_id).first()
+    if not group:
+        raise HTTPException(status_code=404, detail="Grupo não encontrado.")
+    
+    invites = db.query(Invite).filter(Invite.group_id == group_id).all()
+    return invites
 
 @router.get("/my-groups")
 async def get_my_groups(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
