@@ -29,6 +29,7 @@ async def get_other_groups(db: Session = Depends(get_db), current_user: User = D
     groups = db.query(Group).filter(Group.id.notin_(subquery)).all()
     return groups
 
+#test
 @router.post("/")
 async def create_group(group_data: dict, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     try:
