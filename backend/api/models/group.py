@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database.base import Base
 
+
 user_group = Table(
     "user_group",
     Base.metadata,
