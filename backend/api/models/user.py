@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
-from backend.database.base import Base
+from database.base import Base
 import bcrypt
 from .group import user_group
 

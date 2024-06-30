@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 #test
 #test
-from backend.database.base import Base
+from database.base import Base
 
 class Task(Base):
     __tablename__ = "tasks"
