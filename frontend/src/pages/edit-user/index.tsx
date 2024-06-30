@@ -54,15 +54,10 @@ const EditUser: React.FC = () => {
           confirmationAnswer,
           avatar
         );
-        if (response.error) {
-          toast.error(response.error);
-        } else {
-          login(response.access_token);
-          toast.success(response.message);
-        }
-      } catch (error) {
-        console.error("Erro ao atualizar usuário", error);
-        toast.error("Erro ao atualizar usuário. Por favor, tente novamente.");
+        login(response.access_token);
+        toast.success(response.message);
+      } catch (error: any) {
+        toast.error(error.response.data.detail);
       }
     }
   };

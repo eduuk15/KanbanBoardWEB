@@ -6,6 +6,7 @@ from backend.database.base import Base
 user_group = Table(
     "user_group",
     Base.metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
     Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
     Column("group_id", Integer, ForeignKey("groups.id"), primary_key=True)
 )
@@ -21,3 +22,5 @@ class Group(Base):
 
     users = relationship("User", secondary=user_group, back_populates="groups")
     creator = relationship("User", back_populates="created_groups", foreign_keys=[created_by])
+    invites = relationship("Invite", back_populates="group")
+

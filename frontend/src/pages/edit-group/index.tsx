@@ -5,10 +5,12 @@ import Button from "../../components/common/Button";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { getGroup, updateGroup } from "../../api/groups";
+import { getGroup, getGroupInvites, updateGroup } from "../../api/groups";
 import Loader from "../../components/common/Loader";
 import { useAuth } from "../../context/AuthContext";
 import { GroupData } from "../../components/Group/types";
+import { InviteData } from "../../components/Invite/types";
+import Invite from "../../components/Invite";
 
 const EditGroup: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ const EditGroup: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [canEdit, setCanEdit] = useState(false);
 
+  const [invites, setInvites] = useState<InviteData[]>([]);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -34,11 +38,11 @@ const EditGroup: React.FC = () => {
 
         setName(fetchedGroupData.name);
         setDescription(fetchedGroupData.description);
-      } catch (error) {
-        console.error("Erro ao buscar dados do grupo", error);
-        toast.error(
-          "Erro ao buscar dados do grupo. Por favor, tente novamente."
-        );
+
+        const fetchedInvites = await getGroupInvites(parseInt(id!));
+        setInvites(fetchedInvites);
+      } catch (error: any) {
+        toast.error(error.response.data.detail);
       } finally {
         setLoading(false);
       }
@@ -61,15 +65,11 @@ const EditGroup: React.FC = () => {
 
     try {
       const response = await updateGroup(parseInt(id!), name, description);
-      if (response.error) {
-        toast.error(response.error);
-      } else {
-        navigate("/groups");
-        toast.success(response.message);
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar grupo", error);
-      toast.error("Erro ao atualizar grupo. Por favor, tente novamente.");
+
+      navigate("/groups");
+      toast.success(response.message);
+    } catch (error: any) {
+      toast.error(error.response.data.detail);
     }
   };
 
@@ -82,7 +82,7 @@ const EditGroup: React.FC = () => {
         ) : (
           <div className="bg-white p-8 rounded-lg shadow-md w-120">
             <div className="flex justify-center mb-6">
-              <h2 className="text-2xl font-bold">Editar Grupo</h2>
+              <h2 className="text-2xl font-bold">Dados do Grupo</h2>
             </div>
             <form onSubmit={handleUpdateGroup}>
               <Input
@@ -117,6 +117,14 @@ const EditGroup: React.FC = () => {
                 </Button>
               </div>
             </form>
+            <div className="mb-8 mt-8">
+              <h2 className="text-xl font-bold mb-4">Convites</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {invites.map((invite) => (
+                  <Invite key={invite.id} invite={invite} />
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>

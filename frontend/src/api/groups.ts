@@ -9,6 +9,15 @@ export const getGroup = async (id: number) => {
   }
 };
 
+export const getGroupInvites = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/groups/invites/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateGroup = async (
   id: number,
   name: string,
@@ -43,9 +52,31 @@ export const getOtherGroups = async () => {
   }
 };
 
-export const getInvites = async () => {
+export const sendInvite = async (groupId: number) => {
   try {
-    const response = await axiosInstance.get("/users");
+    const response = await axiosInstance.post(`/groups/invites/${groupId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const acceptInvite = async (inviteId: number) => {
+  try {
+    const response = await axiosInstance.post(
+      `/groups/invites/${inviteId}/accept`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const declineInvite = async (inviteId: number) => {
+  try {
+    const response = await axiosInstance.post(
+      `/groups/invites/${inviteId}/decline`
+    );
     return response.data;
   } catch (error) {
     throw error;

@@ -21,17 +21,7 @@ const Login = () => {
       toast.success("Login realizado com sucesso!");
       login(response.access_token);
     } catch (error: any) {
-      if (error.response) {
-        const { status, data } = error.response;
-
-        if (status === 401) {
-          toast.error(data.detail);
-        } else {
-          toast.error(`Erro ${status}: ${data.detail}`);
-        }
-      } else {
-        toast.error("Erro ao tentar fazer login. Tente novamente mais tarde.");
-      }
+      toast.error(error.response.data.detail);
     }
   };
 

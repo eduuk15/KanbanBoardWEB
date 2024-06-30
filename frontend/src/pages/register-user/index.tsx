@@ -32,18 +32,18 @@ const RegisterUser = () => {
       return;
     }
 
-    const response = await registerUser(
-      email,
-      password,
-      confirmationQuestion,
-      confirmationAnswer
-    );
+    try {
+      const response = await registerUser(
+        email,
+        password,
+        confirmationQuestion,
+        confirmationAnswer
+      );
 
-    if (response.error) {
-      toast.error(response.error);
-    } else {
       toast.success(response.message);
       login(response.access_token);
+    } catch (error: any) {
+      toast.error(error.response.data.detail);
     }
   };
 
