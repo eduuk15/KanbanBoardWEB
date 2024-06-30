@@ -3,6 +3,7 @@ export interface UserData {
   name: string;
   email: string;
   password: string;
-  confirmation_question: string;
-  confirmation_answer: string;
+  confirmationQuestion: string;
+  confirmationAnswer: string;
+  avatar: string;
 }
