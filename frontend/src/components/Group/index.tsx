@@ -18,7 +18,6 @@ const Group: React.FC<GroupCardProps> = ({ group, canJoin }) => {
   const user = loggedUserInfo();
   const [showDialog, setShowDialog] = useState(false);
 
-  console.log("group", group);
   const handleEdit = () => {
     navigate(`/group/${group.id}`);
   };
