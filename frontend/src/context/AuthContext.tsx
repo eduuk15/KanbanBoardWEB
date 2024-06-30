@@ -36,7 +36,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        console.log(jwtDecode<UserData>(token));
         return jwtDecode<UserData>(token);
       } catch (error) {
         console.error("Erro ao decodificar o token", error);

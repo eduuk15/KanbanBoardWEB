@@ -1,4 +1,3 @@
-// Board.tsx
 import React from "react";
 import Column from "../Column";
 import { ColumnData } from "../Column/types";
@@ -16,7 +15,7 @@ const Board: React.FC<BoardProps> = ({ columns, loading }) => {
           key={index}
           title={column.title}
           cards={column.cards}
-          loading={loading} // Passando a prop loading para o componente Column
+          loading={loading}
         />
       ))}
     </div>

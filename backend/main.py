@@ -5,11 +5,13 @@ from backend.database.engine import engine
 from backend.api.routes.task import router as task_router
 from backend.api.routes.user import router as user_router
 from backend.api.routes.login import router as login_router
+from backend.api.routes.group import router as group_router
 
 app = FastAPI()
 
 origins = [
     "http://localhost:3000",
+    "http://localhost",
 ]
 
 app.add_middleware(
@@ -22,9 +24,13 @@ app.add_middleware(
 
 from backend.api.models.task import Task
 from backend.api.models.user import User
+from backend.api.models.group import Group, user_group
+from backend.api.models.invite import Invite
+
 
 Base.metadata.create_all(bind=engine)
 
 app.include_router(task_router, prefix='/tasks', tags=['tasks'])
 app.include_router(user_router, prefix='/users', tags=['users'])
 app.include_router(login_router, prefix='/login', tags=['login'])
+app.include_router(group_router, prefix='/groups', tags=['groups'])

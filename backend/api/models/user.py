@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, Enum, Index
+from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy.orm import relationship
 from backend.database.base import Base
 import bcrypt
+from .group import user_group
 
 class User(Base):
     __tablename__ = "users"
@@ -12,6 +14,11 @@ class User(Base):
     confirmation_question = Column(Enum('1', '2', '3', name='confirmation_question_enum')) 
     confirmation_answer = Column(String)
     avatar = Column(Enum('1', '2', '3', '4', '5', '6', '7', '8', name='avatar_enum'))
+
+    groups = relationship("Group", secondary=user_group, back_populates="users")
+    created_groups = relationship("Group", back_populates="creator", foreign_keys="[Group.created_by]")
+    invites = relationship("Invite", back_populates="user")
+
 
     def set_password(self, password: str):
         self.password = self.generate_password_hash(password)
