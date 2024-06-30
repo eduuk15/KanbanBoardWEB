@@ -24,6 +24,7 @@ export const registerUser = async (
     });
     return response.data;
   } catch (error) {
+    console.log("error2", error);
     throw error;
   }
 };

@@ -9,6 +9,85 @@ from backend.api.models.invite import Invite
 
 router = APIRouter()
 
+@router.post("/invites/{invite_id}/accept")
+async def accept_invite(
+    invite_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    invite = db.query(Invite).filter(Invite.id == invite_id).first()
+    if not invite:
+        raise HTTPException(status_code=404, detail="Convite não encontrado.")
+    
+    group = db.query(Group).filter(Group.id == invite.group_id).first()
+    user = db.query(User).filter(User.id == invite.user_id).first()
+    
+    if not group:
+        raise HTTPException(status_code=404, detail="Grupo não encontrado.")
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+    
+    try:
+        group.users.append(user)
+        db.delete(invite)
+        db.commit()
+        return {"message": "Convite aceito e usuário adicionado ao grupo."}
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Erro ao processar o convite.")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Erro interno no servidor.")
+
+@router.post("/invites/{invite_id}/decline")
+async def decline_invite(
+    invite_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    invite = db.query(Invite).filter(Invite.id == invite_id).first()
+    if not invite:
+        raise HTTPException(status_code=404, detail="Convite não encontrado.")
+    
+    try:
+        db.delete(invite)
+        db.commit()
+        return {"message": "Convite recusado e excluído."}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Erro interno no servidor.")
+
+@router.post("/invites/{group_id}")
+async def create_invite(
+    group_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    group = db.query(Group).filter(Group.id == group_id).first()
+    user = db.query(User).filter(User.id == current_user.id).first()
+
+    if not group:
+        raise HTTPException(status_code=404, detail="Grupo não encontrado.")
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+    
+    existing_invite = db.query(Invite).filter(Invite.group_id == group_id, Invite.user_id == current_user.id).first()
+    if existing_invite:
+        raise HTTPException(status_code=400, detail="Você já enviou um convite para este grupo.")
+    
+    try:
+        invite = Invite(group_id=group_id, user_id=current_user.id)
+        db.add(invite)
+        db.commit()
+        db.refresh(invite)
+        return invite
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Erro ao criar o convite.")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Erro interno no servidor.")
+    
 @router.get("/invites/{group_id}")
 async def get_group_invites(group_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     group = db.query(Group).filter(Group.id == group_id).first()
@@ -29,21 +108,20 @@ async def get_other_groups(db: Session = Depends(get_db), current_user: User = D
     groups = db.query(Group).filter(Group.id.notin_(subquery)).all()
     return groups
 
-#test
-@router.post("/")
-async def create_group(group_data: dict, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    try:
-        group = Group(**group_data, created_by=current_user.id)
-        db.add(group)
-        db.commit()
-        db.refresh(group)
-        return group
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=400, detail="Já existe um grupo com esse nome.")
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail="Internal server error")
+# @router.post("/")
+# async def create_group(group_data: dict, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+#     try:
+#         group = Group(**group_data, created_by=current_user.id)
+#         db.add(group)
+#         db.commit()
+#         db.refresh(group)
+#         return group
+#     except IntegrityError:
+#         db.rollback()
+#         raise HTTPException(status_code=400, detail="Já existe um grupo com esse nome.")
+#     except Exception as e:
+#         db.rollback()
+#         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.put("/{group_id}")
 async def edit_group(group_id: int, group_data: dict, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
@@ -78,32 +156,32 @@ async def get_all_groups(db: Session = Depends(get_db)):
     groups = db.query(Group).all()
     return groups
 
-@router.delete("/{group_id}")
-async def delete_group(group_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    group = db.query(Group).filter(Group.id == group_id).first()
-    if not group:
-        raise HTTPException(status_code=404, detail=f"Grupo com {group_id} não encontrado.")
+# @router.delete("/{group_id}")
+# async def delete_group(group_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+#     group = db.query(Group).filter(Group.id == group_id).first()
+#     if not group:
+#         raise HTTPException(status_code=404, detail=f"Grupo com {group_id} não encontrado.")
 
-    db.delete(group)
-    db.commit()
-    return {"message": f"Grupo com {group_id} removido."}
+#     db.delete(group)
+#     db.commit()
+#     return {"message": f"Grupo com {group_id} removido."}
 
-@router.post("/{group_id}/users/{user_id}")
-async def add_user_to_group(group_id: int, user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    group = db.query(Group).filter(Group.id == group_id).first()
-    user = db.query(User).filter(User.id == user_id).first()
+# @router.post("/{group_id}/users/{user_id}")
+# async def add_user_to_group(group_id: int, user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+#     group = db.query(Group).filter(Group.id == group_id).first()
+#     user = db.query(User).filter(User.id == user_id).first()
     
-    if not group:
-        raise HTTPException(status_code=404, detail=f"Grupo com id {group_id} não encontrado.")
-    if not user:
-        raise HTTPException(status_code=404, detail=f"Usuário com id {user_id} não encontrado.")
+#     if not group:
+#         raise HTTPException(status_code=404, detail=f"Grupo com id {group_id} não encontrado.")
+#     if not user:
+#         raise HTTPException(status_code=404, detail=f"Usuário com id {user_id} não encontrado.")
     
-    if user in group.users:
-        raise HTTPException(status_code=400, detail="Usuário já está no grupo.")
+#     if user in group.users:
+#         raise HTTPException(status_code=400, detail="Usuário já está no grupo.")
     
-    group.users.append(user)
-    db.commit()
-    return {"message": f"Usuário {user_id} adicionado ao grupo {group_id}."}
+#     group.users.append(user)
+#     db.commit()
+#     return {"message": f"Usuário {user_id} adicionado ao grupo {group_id}."}
 
 @router.delete("/{group_id}/users/{user_id}")
 async def remove_user_from_group(group_id: int, user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

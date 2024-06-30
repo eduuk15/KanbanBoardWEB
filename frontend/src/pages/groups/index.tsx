@@ -49,7 +49,7 @@ const GroupsPage: React.FC = () => {
               <h2 className="text-xl font-bold mb-4">Meus Grupos</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {myGroups.map((group) => (
-                  <Group key={group.id} group={group} />
+                  <Group key={group.id} group={group} canJoin={false} />
                 ))}
               </div>
             </div>
@@ -57,7 +57,7 @@ const GroupsPage: React.FC = () => {
               <h2 className="text-xl font-bold mb-4">Outros Grupos</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {otherGroups.map((group) => (
-                  <Group key={group.id} group={group} />
+                  <Group key={group.id} group={group} canJoin={true} />
                 ))}
               </div>
             </div>

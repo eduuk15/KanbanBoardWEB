@@ -24,6 +24,19 @@ async def create_user(user_data: dict, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail="Internal server error")
+    expires_delta = timedelta(minutes=30)
+    access_token = create_access_token(
+        data={
+            "id": user.id,
+            "email": user.email, 
+            "name": user.name, 
+            "confirmationQuestion": user.confirmation_question, 
+            "confirmationAnswer": user.confirmation_answer,
+            "avatar": user.avatar
+        }, 
+        expires_delta=expires_delta
+    )
+    return {"message": "Usuário criado com sucesso!", "access_token": access_token}
     
 @router.put("/{user_id}")
 async def edit_user(user_id: int, user_data: dict, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
