@@ -9,4 +9,4 @@ Em conjunto com o restante da equipe, definimos o uso de React + TypeScript para
 Eduardo Knopp (23103713) </br>
 Igor Ferreira Fonseca (23103128) </br>
 Pedro Henrique Colla (23100744) </br>
-Rafael Bleyer Zanette Furtado () </br>
+Rafael Bleyer Zanette Furtado (22215827) </br>
