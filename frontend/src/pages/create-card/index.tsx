@@ -22,14 +22,12 @@ const CreateCard: React.FC = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<"To Do" | "In Progress" | "Done">(
-    initialStatus
-  );
+  const [status] = useState<"To Do" | "In Progress" | "Done">(initialStatus);
 
   const [type, setType] = useState<
     "fix" | "feature" | "investigation" | "refactor"
   >("fix");
-  const [assignedUserId, setAssignedUserId] = useState(user?.id ?? 0);
+  const [assignedUserId] = useState(user?.id ?? 0);
   const [priority, setPriority] = useState<"1" | "2" | "3">("1");
   const [dueDate, setDueDate] = useState<Date | null>(null); // Alteração para usar Date
 
