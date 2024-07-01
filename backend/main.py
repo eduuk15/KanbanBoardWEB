@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
 from database.base import Base
 from database.engine import engine
 from api.routes.task import router as task_router
@@ -9,21 +9,22 @@ from api.routes.group import router as group_router
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-    "http://localhost",
-    "https://kanbanboardweb.up.railway.app",
-    "https://kanbanboardweb.up.railway.app:8080",
-    "http://kanbanboardweb-production.up.railway.app",
-    "https://kanbanboardweb-production.up.railway.app"
-]
+# origins = [
+#     "http://localhost:3000",
+#     "http://localhost",
+#     "https://kanbanboardweb.up.railway.app",
+#     "https://kanbanboardweb.up.railway.app:8080",
+#     "http://kanbanboardweb-production.up.railway.app",
+#     "https://kanbanboardweb-production.up.railway.app"
+# ]
 
-app.add_middleware(
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],   
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],   
+# )
 
 from api.models.task import Task
 from api.models.user import User
