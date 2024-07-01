@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 from database.base import Base
 from database.engine import engine
 from api.routes.task import router as task_router
@@ -18,13 +18,13 @@ app = FastAPI()
 #     "https://kanbanboardweb-production.up.railway.app"
 # ]
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],   
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],   
+)
 
 from api.models.task import Task
 from api.models.user import User
