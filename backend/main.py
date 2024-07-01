@@ -15,7 +15,8 @@ origins = [
     "http://localhost",
     "https://kanbanboardweb.up.railway.app",
     "https://kanbanboardweb.up.railway.app:8080",
-    "http://kanbanboardweb-production.up.railway.app"
+    "http://kanbanboardweb-production.up.railway.app",
+    "https://kanbanboardweb-production.up.railway.app"
 ]
 
 app.add_middleware(
