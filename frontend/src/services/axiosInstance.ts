@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "http://kanbanboardweb-production.up.railway.app",
+  baseURL: "https://kanbanboardweb-production.up.railway.app",
 });
 
 axiosInstance.interceptors.request.use(

@@ -21,7 +21,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://kanbanboardweb-production.up.railway.app",
+        "https://kanbanboardweb-production.up.railway.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
