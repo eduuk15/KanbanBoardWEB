@@ -22,7 +22,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://kanbanboardweb.up.railway.app",
+        "https://humble-rebirth",
     ],
     allow_credentials=True,
     allow_methods=["*"],
