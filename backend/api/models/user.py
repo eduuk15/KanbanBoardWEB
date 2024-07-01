@@ -1,6 +1,6 @@
+from backend.database.base import Base
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
-from backend.database.base import Base
 import bcrypt
 from .group import user_group
 
@@ -15,20 +15,23 @@ class User(Base):
     confirmation_answer = Column(String)
     avatar = Column(Enum('1', '2', '3', '4', '5', '6', '7', '8', name='avatar_enum'))
 
-    groups = relationship("Group", secondary=user_group, back_populates="users")
-    created_groups = relationship("Group", back_populates="creator", foreign_keys="[Group.created_by]")
-    invites = relationship("Invite", back_populates="user")
+    created_tasks = relationship("Task", back_populates="creator", foreign_keys="[Task.created_by]")
+    assigned_tasks = relationship("Task", back_populates="assigned_user", foreign_keys="[Task.assigned_user_id]")
 
+    groups = relationship("Group", secondary=user_group, back_populates="users")
+    created_groups = relationship("Group", back_populates="creator")
+
+    invites = relationship("Invite", back_populates="user")
 
     def set_password(self, password: str):
         self.password = self.generate_password_hash(password)
 
     def check_password(self, password: str):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
-    
+
     def check_security_answer(self, answer: str) -> bool:
         return str(self.confirmation_answer).lower() == answer.lower()
-    
+
     @staticmethod
     def generate_password_hash(password: str) -> str:
         hashed_bytes = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())

@@ -54,7 +54,7 @@ const Group: React.FC<GroupCardProps> = ({ group, canJoin }) => {
           </Button>
         ) : (
           <Button onClick={handleEdit} className="ml-auto">
-            {group.created_by != user?.id ? "Visualizar" : "Editar"}
+            {group.created_by !== user?.id ? "Visualizar" : "Editar"}
           </Button>
         )}
       </div>

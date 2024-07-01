@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosError } from "axios";
+import axios, { AxiosInstance } from "axios";
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: "http://localhost:8000",
@@ -29,10 +29,10 @@ axiosInstance.interceptors.response.use(
 
 const handleAxiosError = (error: any) => {
   if (error.response) {
-    console.error("Request failed with status:", error.response.status);
-    console.error("Error details:", error.response.data);
+    console.error("Requisição falhou com o status:", error.response.status);
+    console.error("Detalhes:", error.response.data);
   } else if (error.request) {
-    console.error("Request failed:", error.request);
+    console.error("Requição falhou:", error.request);
   } else {
     console.error("Error:", error.message);
   }

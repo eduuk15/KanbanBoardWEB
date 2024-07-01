@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from backend.api.models.user import User
 from backend.api.routes.login import login_user
+from backend.api.models.group import user_group
 from backend.database.session import get_db
 from backend.core.security import create_access_token, get_current_user
 from datetime import timedelta
@@ -81,26 +82,17 @@ async def edit_user(user_id: int, user_data: dict, db: Session = Depends(get_db)
     return {"message": "Usuário editado com sucesso!", "access_token": access_token}
 
 @router.get("/{user_id}")
-async def get_user(user_id: int, db: Session = Depends(get_db)):
+async def get_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     user = db.query(User).filter(User.id == user_id).first()
-    if user is None:
-        raise HTTPException(status_code=404, detail=f"Usuário com id {user_id} não foi encontrado")
-    return user
-
-@router.get("/by-email/{user_email}")
-async def get_user_by_email(user_email: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == user_email).first()
-    if user is None:
-        raise HTTPException(status_code=404, detail=f"Usuário com e-mail {user_email} não foi encontrado")
-    return user
-
-@router.get("/")
-async def get_all_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    if current_user is None:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+    if not user:
+        raise HTTPException(status_code=404, detail=f"Usuário com id {user_id} não encontrado")
     
-    users = db.query(User).all()
-    return users
+    user_in_group = db.query(user_group).filter(user_group.c.user_id == user_id, user_group.c.group_id.in_([group.id for group in current_user.groups])).first()
+    
+    if not user_in_group and current_user.id != user_id:
+        raise HTTPException(status_code=403, detail="Você não tem permissão para visualizar este usuário")
+    
+    return user
 
 @router.post("/change-password")
 async def change_password(change_password_req: dict, db: Session = Depends(get_db)):
@@ -123,3 +115,21 @@ async def change_password(change_password_req: dict, db: Session = Depends(get_d
     db.commit()
 
     return await login_user({"email": email, "password": new_password}, db)
+
+# @router.get("/by-email/{user_email}")
+# async def get_user_by_email(user_email: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+#     if current_user.email != user_email:
+#         raise HTTPException(status_code=403, detail="Você não tem permissão para ler os dados deste usuário")
+    
+#     user = db.query(User).filter(User.email == user_email).first()
+#     if user is None:
+#         raise HTTPException(status_code=404, detail=f"Usuário com e-mail {user_email} não foi encontrado")
+#     return user
+
+# @router.get("/")
+# async def get_all_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+#     if current_user is None:
+#         raise HTTPException(status_code=401, detail="Unauthorized")
+    
+#     users = db.query(User).all()
+#     return users

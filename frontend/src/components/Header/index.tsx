@@ -1,5 +1,5 @@
 import { FaUserAlt } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -58,12 +58,14 @@ const Header = () => {
               <img
                 src={`/avatar${parseInt(user.avatar)}.jpg`}
                 alt="Profile"
-                className="w-8 h-8 rounded-full mr-2"
+                className="w-8 h-8 rounded-full mr-2 hover:text-gray-400 cursor-pointer"
               />
             ) : (
-              <FaUserAlt className="w-8 h-8 rounded-full mr-2" />
+              <FaUserAlt className="w-8 h-8 rounded-full mr-2 hover:text-gray-400 cursor-pointer" />
             )}
-            <span>{user.name}</span>
+            <span className="hover:text-gray-400 cursor-pointer">
+              {user.name ?? user.email}
+            </span>
             {dropdownOpen && (
               <div className="absolute right-0 top-full mt-2 w-48 bg-gray-800 border border-gray-200 rounded shadow-lg">
                 <ul>

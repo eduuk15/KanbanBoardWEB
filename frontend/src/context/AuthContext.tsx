@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserData } from "../components/User/types";
+import { toast } from "react-toastify";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -37,8 +38,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (token) {
       try {
         return jwtDecode<UserData>(token);
-      } catch (error) {
-        console.error("Erro ao decodificar o token", error);
+      } catch (error: any) {
+        toast.error(error.response.data.detail);
       }
     }
     return null;
