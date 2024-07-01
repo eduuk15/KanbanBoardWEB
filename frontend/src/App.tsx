@@ -14,6 +14,7 @@ import RegisterUser from "./pages/register-user";
 import EditUser from "./pages/edit-user";
 import GroupsPage from "./pages/groups";
 import EditGroup from "./pages/edit-group";
+import CreateCard from "./pages/create-card";
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -28,6 +29,7 @@ const App: React.FC = () => {
           <Route path="/groups" element={<GroupsPage />} />
           <Route path="/user/:id" element={<EditUser />} />
           <Route path="/group/:id" element={<EditGroup />} />
+          <Route path="/create-card" element={<CreateCard />} />
         </>
       ) : null}
       <Route path="/register-user" element={<RegisterUser />} />

@@ -35,6 +35,8 @@ const GroupsPage: React.FC = () => {
     fetchData();
   }, [user?.id]);
 
+  myGroups.filter((group) => console.log(group));
+
   return (
     <div className="flex flex-col w-full min-h-screen">
       <Header />
