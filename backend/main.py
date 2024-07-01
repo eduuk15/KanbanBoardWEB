@@ -22,8 +22,8 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://humble-rebirth:8080",
-        "https://humble-rebirth",
+        "http://humble-rebirth:8080",
+        "http://humble-rebirth",
     ],
     allow_credentials=True,
     allow_methods=["*"],
