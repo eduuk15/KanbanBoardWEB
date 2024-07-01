@@ -1,9 +1,6 @@
+// #
 import React from "react";
-import {
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./pages/login";
 import { useAuth } from "./context/AuthContext";
 import NotFoundPage from "./pages/not-found";
