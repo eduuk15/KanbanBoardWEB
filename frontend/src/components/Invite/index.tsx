@@ -9,9 +9,10 @@ import { acceptInvite, declineInvite } from "../../api/groups";
 
 interface InviteCardProps {
   invite: InviteData;
+  onRefreshInvites: () => void;
 }
 
-const Invite: React.FC<InviteCardProps> = ({ invite }) => {
+const Invite: React.FC<InviteCardProps> = ({ invite, onRefreshInvites }) => {
   const [userInvite, setUserInvite] = useState<UserData | null>(null);
   const [showDialog, setShowDialog] = useState(false);
   const [actionType, setActionType] = useState<"accept" | "decline" | null>(
@@ -52,6 +53,7 @@ const Invite: React.FC<InviteCardProps> = ({ invite }) => {
           actionType === "accept" ? "aceito" : "recusado"
         } com sucesso.`
       );
+      onRefreshInvites();
       handleCloseDialog();
     } catch (error: any) {
       toast.error(
@@ -64,12 +66,15 @@ const Invite: React.FC<InviteCardProps> = ({ invite }) => {
     <div className="bg-white p-4 rounded-lg shadow-md">
       <h3 className="text-lg font-bold">{userInvite?.name}</h3>
       <p>{userInvite?.email}</p>
-      <Button onClick={() => handleOpenDialog("accept")} className="ml-auto">
-        Aceitar
-      </Button>
-      <Button onClick={() => handleOpenDialog("decline")} className="ml-auto">
-        Recusar
-      </Button>
+      <div className="flex justify-end mt-4">
+        <Button
+          onClick={() => handleOpenDialog("decline")}
+          className="mr-2 bg-red-500"
+        >
+          Recusar
+        </Button>
+        <Button onClick={() => handleOpenDialog("accept")}>Aceitar</Button>
+      </div>
       {showDialog && (
         <ConfirmationDialog
           title="Confirmação"

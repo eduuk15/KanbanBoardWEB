@@ -21,17 +21,6 @@ const RegisterUser = () => {
       return;
     }
 
-    if (
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !confirmationQuestion ||
-      !confirmationAnswer
-    ) {
-      toast.warning("Por favor, preencha todos os campos obrigatórios.");
-      return;
-    }
-
     try {
       const response = await registerUser(
         email,
@@ -89,7 +78,7 @@ const RegisterUser = () => {
               id="confirmation-question"
               value={confirmationQuestion}
               onChange={(e) => setConfirmationQuestion(e.target.value)}
-              className={`mt-1 block w-full py-2 px-3 border border-red-500 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              className={`mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
               required
             >
               <option value="">Selecione uma pergunta</option>
