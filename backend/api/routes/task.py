@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from backend.api.models.task import Task
-from backend.api.models.user import User
-from backend.api.models.group import user_group
+from api.models.task import Task
+from api.models.user import User
+from api.models.group import user_group
 from database.session import get_db
-from backend.core.security import get_current_user
+from core.security import get_current_user
 
 router = APIRouter()
 
