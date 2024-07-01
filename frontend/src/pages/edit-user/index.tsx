@@ -32,17 +32,6 @@ const EditUser: React.FC = () => {
       return;
     }
 
-    if (
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !confirmationQuestion ||
-      !confirmationAnswer
-    ) {
-      toast.warning("Por favor, preencha todos os campos obrigatórios.");
-      return;
-    }
-
     if (user) {
       try {
         const response = await updateUser(

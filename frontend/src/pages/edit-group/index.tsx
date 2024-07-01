@@ -73,6 +73,15 @@ const EditGroup: React.FC = () => {
     }
   };
 
+  const handleRefreshInvites = async () => {
+    try {
+      const [invitesData] = await Promise.all([getGroupInvites(parseInt(id!))]);
+      setInvites(invitesData);
+    } catch (error: any) {
+      toast.error(error.response.data.detail);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -117,14 +126,20 @@ const EditGroup: React.FC = () => {
                 </Button>
               </div>
             </form>
-            <div className="mb-8 mt-8">
-              <h2 className="text-xl font-bold mb-4">Convites</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {invites.map((invite) => (
-                  <Invite key={invite.id} invite={invite} />
-                ))}
+            {invites.length > 0 && (
+              <div className="mb-8 mt-8">
+                <h2 className="text-xl font-bold mb-4">Convites</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {invites.map((invite) => (
+                    <Invite
+                      key={invite.id}
+                      invite={invite}
+                      onRefreshInvites={handleRefreshInvites}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>
