@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from database.base import Base
+from backend.database.base import Base
 
 class Invite(Base):
     __tablename__ = "invites"

@@ -39,8 +39,10 @@ const EditGroup: React.FC = () => {
         setName(fetchedGroupData.name);
         setDescription(fetchedGroupData.description);
 
-        const fetchedInvites = await getGroupInvites(parseInt(id!));
-        setInvites(fetchedInvites);
+        if (canEdit) {
+          const fetchedInvites = await getGroupInvites(parseInt(id!));
+          setInvites(fetchedInvites);
+        }
       } catch (error: any) {
         toast.error(error.response.data.detail);
       } finally {
@@ -48,7 +50,7 @@ const EditGroup: React.FC = () => {
       }
     }
     fetchData();
-  }, [id, user?.id]);
+  }, [id, user?.id, canEdit]);
 
   const handleUpdateGroup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,8 +77,12 @@ const EditGroup: React.FC = () => {
 
   const handleRefreshInvites = async () => {
     try {
-      const [invitesData] = await Promise.all([getGroupInvites(parseInt(id!))]);
-      setInvites(invitesData);
+      if (canEdit) {
+        const [invitesData] = await Promise.all([
+          getGroupInvites(parseInt(id!)),
+        ]);
+        setInvites(invitesData);
+      }
     } catch (error: any) {
       toast.error(error.response.data.detail);
     }
@@ -126,7 +132,7 @@ const EditGroup: React.FC = () => {
                 </Button>
               </div>
             </form>
-            {invites.length > 0 && (
+            {invites.length > 0 && canEdit && (
               <div className="mb-8 mt-8">
                 <h2 className="text-xl font-bold mb-4">Convites</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
