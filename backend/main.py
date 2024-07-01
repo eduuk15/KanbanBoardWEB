@@ -9,7 +9,7 @@ from backend.api.routes.group import router as group_router
 
 app = FastAPI()
 
-@app.middleware("http")
+@app.middleware("https")
 async def add_cors_headers(request, call_next):
     response = await call_next(request)
     response.headers["Access-Control-Allow-Origin"] = "https://kanbanboardweb.up.railway.app, http://localhost:3000, https://kanbanboardweb-production.up.railway.app, http://kanbanboardweb.up.railway.app"
