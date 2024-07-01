@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://kanbanboardweb",
 });
 
 axiosInstance.interceptors.request.use(
@@ -29,10 +29,10 @@ axiosInstance.interceptors.response.use(
 
 const handleAxiosError = (error: any) => {
   if (error.response) {
-    console.error("Requisição falhou com o status:", error.response.status);
-    console.error("Detalhes:", error.response.data);
+    console.error("Request failed with status:", error.response.status);
+    console.error("Error details:", error.response.data);
   } else if (error.request) {
-    console.error("Requição falhou:", error.request);
+    console.error("Request failed:", error.request);
   } else {
     console.error("Error:", error.message);
   }

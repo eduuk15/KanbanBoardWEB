@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from backend.api.models.user import User
-from backend.api.routes.login import login_user
-from backend.api.models.group import user_group
-from backend.database.session import get_db
-from backend.core.security import create_access_token, get_current_user
+from api.models.user import User
+from api.routes.login import login_user
+from api.models.group import user_group
+from api.models.invite import Invite
+from database.session import get_db
+from core.security import create_access_token, get_current_user
 from datetime import timedelta
 
 router = APIRouter()
@@ -87,12 +88,26 @@ async def get_user(user_id: int, db: Session = Depends(get_db), current_user: Us
     if not user:
         raise HTTPException(status_code=404, detail=f"Usuário com id {user_id} não encontrado")
     
-    user_in_group = db.query(user_group).filter(user_group.c.user_id == user_id, user_group.c.group_id.in_([group.id for group in current_user.groups])).first()
+    if current_user.id == user_id:
+        return user
     
-    if not user_in_group and current_user.id != user_id:
-        raise HTTPException(status_code=403, detail="Você não tem permissão para visualizar este usuário")
+    user_groups = db.query(user_group.c.group_id).filter(user_group.c.user_id == user_id).subquery()
+    current_user_groups = [group.id for group in current_user.groups]
     
-    return user
+    common_groups = db.query(user_group).filter(
+        user_group.c.group_id.in_(current_user_groups),
+        user_group.c.group_id.in_(user_groups)
+    ).first()
+    
+    invited_to_groups = db.query(Invite).filter(
+        Invite.user_id == user_id,
+        Invite.group_id.in_(current_user_groups)
+    ).first()
+    
+    if common_groups or current_user.id == user.id or invited_to_groups:
+        return user
+    
+    raise HTTPException(status_code=403, detail="Você não tem permissão para visualizar este usuário")
 
 @router.post("/change-password")
 async def change_password(change_password_req: dict, db: Session = Depends(get_db)):
@@ -115,16 +130,6 @@ async def change_password(change_password_req: dict, db: Session = Depends(get_d
     db.commit()
 
     return await login_user({"email": email, "password": new_password}, db)
-
-# @router.get("/by-email/{user_email}")
-# async def get_user_by_email(user_email: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-#     if current_user.email != user_email:
-#         raise HTTPException(status_code=403, detail="Você não tem permissão para ler os dados deste usuário")
-    
-#     user = db.query(User).filter(User.email == user_email).first()
-#     if user is None:
-#         raise HTTPException(status_code=404, detail=f"Usuário com e-mail {user_email} não foi encontrado")
-#     return user
 
 # @router.get("/")
 # async def get_all_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

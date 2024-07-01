@@ -34,7 +34,6 @@ const EditCard: React.FC = () => {
     async function fetchCard() {
       try {
         const cardData = await getCard(parseInt(id!));
-        console.log("cardData", cardData);
         setTitle(cardData.title);
         setDescription(cardData.description);
         setStatus(cardData.status);

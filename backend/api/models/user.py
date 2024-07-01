@@ -1,4 +1,4 @@
-from backend.database.base import Base
+from database.base import Base
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 import bcrypt
