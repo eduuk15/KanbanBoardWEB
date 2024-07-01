@@ -5,8 +5,8 @@ from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
-from backend.database.session import get_db
-from backend.api.models.user import User
+from database.session import get_db
+from api.models.user import User
 
 SECRET_KEY = "5(tF902mya(QAznBorLZIjnCN+_4DLdF"
 ALGORITHM = "HS256"

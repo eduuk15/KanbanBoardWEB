@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum, ForeignKey, Date, Boolean
-from backend.database.base import Base
+from database.base import Base
 from sqlalchemy.orm import relationship
 
 class Task(Base):
