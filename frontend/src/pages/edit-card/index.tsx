@@ -1,41 +1,56 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Input from "../../components/common/Input";
 import Button from "../../components/common/Button";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { createCard } from "../../api/cards";
 import Loader from "../../components/common/Loader";
 import { useAuth } from "../../context/AuthContext";
-import { useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { getCard, updateCard } from "../../api/cards";
 
-const CreateCard: React.FC = () => {
-  const location = useLocation();
-  const initialStatus = location.state?.status ?? "To Do";
-
+const EditCard: React.FC = () => {
   const navigate = useNavigate();
   const { loggedUserInfo } = useAuth();
   const user = loggedUserInfo();
 
+  const { id } = useParams<{ id: string }>();
+  const [loading, setLoading] = useState(true);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<"To Do" | "In Progress" | "Done">(
-    initialStatus
+    "To Do"
   );
-
   const [type, setType] = useState<
     "fix" | "feature" | "investigation" | "refactor"
   >("fix");
-  const [assignedUserId, setAssignedUserId] = useState(user?.id ?? 0);
   const [priority, setPriority] = useState<"1" | "2" | "3">("1");
-  const [dueDate, setDueDate] = useState<Date | null>(null); // Alteração para usar Date
+  const [dueDate, setDueDate] = useState<Date | null>(null);
 
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function fetchCard() {
+      try {
+        const cardData = await getCard(parseInt(id!));
+        console.log("cardData", cardData);
+        setTitle(cardData.title);
+        setDescription(cardData.description);
+        setStatus(cardData.status);
+        setType(cardData.type);
+        setPriority(cardData.priority);
+        setDueDate(new Date(cardData.due_date));
+      } catch (error: any) {
+        toast.error(error.response.data.detail);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCard();
+  }, [id]);
 
-  const handleCreateCard = async (e: React.FormEvent) => {
+  const handleUpdateCard = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title || !description || !dueDate) {
@@ -46,18 +61,19 @@ const CreateCard: React.FC = () => {
     try {
       setLoading(true);
 
-      await createCard(
+      await updateCard(
+        parseInt(id!),
         title,
         description,
         status,
         type,
-        assignedUserId,
+        user?.id ?? null,
         priority,
         dueDate?.toISOString() || ""
       );
 
       navigate("/board");
-      toast.success("Cartão criado com sucesso!");
+      toast.success("Cartão atualizado com sucesso!");
     } catch (error: any) {
       toast.error(error.response.data.detail);
     } finally {
@@ -74,9 +90,9 @@ const CreateCard: React.FC = () => {
         ) : (
           <div className="bg-white p-8 rounded-lg shadow-md w-120">
             <div className="flex justify-center mb-6">
-              <h2 className="text-2xl font-bold">Criar Cartão</h2>
+              <h2 className="text-2xl font-bold">Editar Cartão</h2>
             </div>
-            <form onSubmit={handleCreateCard}>
+            <form onSubmit={handleUpdateCard}>
               <Input
                 id="title"
                 label="Título"
@@ -169,7 +185,7 @@ const CreateCard: React.FC = () => {
                 />
               </div>
               <div className="flex justify-center mt-4">
-                <Button type="submit">Criar</Button>
+                <Button type="submit">Atualizar</Button>
               </div>
             </form>
           </div>
@@ -180,4 +196,4 @@ const CreateCard: React.FC = () => {
   );
 };
 
-export default CreateCard;
+export default EditCard;

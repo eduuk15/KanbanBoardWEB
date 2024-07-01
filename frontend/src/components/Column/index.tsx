@@ -10,9 +10,15 @@ interface ColumnProps {
   title: string;
   cards: CardData[];
   loading: boolean;
+  onRefreshCards: () => void;
 }
 
-const Column: React.FC<ColumnProps> = ({ title, cards, loading }) => {
+const Column: React.FC<ColumnProps> = ({
+  title,
+  cards,
+  loading,
+  onRefreshCards,
+}) => {
   const navigate = useNavigate();
 
   const handleAddNewCard = () => {
@@ -35,10 +41,12 @@ const Column: React.FC<ColumnProps> = ({ title, cards, loading }) => {
         <Loader />
       ) : cards.length === 0 ? (
         <div className="bg-white shadow-md rounded-md p-4 mb-4">
-          <p className="text-gray-600">Não existem tarefas.</p>
+          <p className="text-gray-600">Não existem cartões.</p>
         </div>
       ) : (
-        cards.map((card, index) => <Card key={index} card={card} />)
+        cards.map((card, index) => (
+          <Card key={index} card={card} onRefreshCards={onRefreshCards} />
+        ))
       )}
     </div>
   );

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./pages/login";
 import { useAuth } from "./context/AuthContext";
 import NotFoundPage from "./pages/not-found";
@@ -15,6 +10,7 @@ import EditUser from "./pages/edit-user";
 import GroupsPage from "./pages/groups";
 import EditGroup from "./pages/edit-group";
 import CreateCard from "./pages/create-card";
+import EditCard from "./pages/edit-card";
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -29,6 +25,7 @@ const App: React.FC = () => {
           <Route path="/groups" element={<GroupsPage />} />
           <Route path="/user/:id" element={<EditUser />} />
           <Route path="/group/:id" element={<EditGroup />} />
+          <Route path="/card/:id" element={<EditCard />} />
           <Route path="/create-card" element={<CreateCard />} />
         </>
       ) : null}

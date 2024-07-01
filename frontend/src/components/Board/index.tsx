@@ -5,9 +5,10 @@ import { ColumnData } from "../Column/types";
 interface BoardProps {
   columns: ColumnData[];
   loading: boolean;
+  onRefreshCards: () => void;
 }
 
-const Board: React.FC<BoardProps> = ({ columns, loading }) => {
+const Board: React.FC<BoardProps> = ({ columns, loading, onRefreshCards }) => {
   return (
     <div className="flex w-full">
       {columns.map((column, index) => (
@@ -16,6 +17,7 @@ const Board: React.FC<BoardProps> = ({ columns, loading }) => {
           title={column.title}
           cards={column.cards}
           loading={loading}
+          onRefreshCards={onRefreshCards}
         />
       ))}
     </div>

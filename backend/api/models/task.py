@@ -14,10 +14,6 @@ class Task(Base):
     assigned_user_id = Column(Integer, ForeignKey('users.id'))
     created_by = Column(Integer, ForeignKey('users.id'))
     created_at = Column(Date)
-    updated_by = Column(Integer)
-    updated_at = Column(Date)
-    deleted = Column(Boolean, default=False)
-    deleted_by = Column(String)
     due_date = Column(Date)
 
     creator = relationship("User", back_populates="created_tasks", foreign_keys="[Task.created_by]")
