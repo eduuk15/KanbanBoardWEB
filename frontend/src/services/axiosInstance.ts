@@ -27,13 +27,13 @@ export const axiosInstance: AxiosInstance = axios.create({
 //   }
 // );
 
-const handleAxiosError = (error: any) => {
-  if (error.response) {
-    console.error("Request failed with status:", error.response.status);
-    console.error("Error details:", error.response.data);
-  } else if (error.request) {
-    console.error("Request failed:", error.request);
-  } else {
-    console.error("Error:", error.message);
-  }
-};
+// const handleAxiosError = (error: any) => {
+//   if (error.response) {
+//     console.error("Request failed with status:", error.response.status);
+//     console.error("Error details:", error.response.data);
+//   } else if (error.request) {
+//     console.error("Request failed:", error.request);
+//   } else {
+//     console.error("Error:", error.message);
+//   }
+// };
