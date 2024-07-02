@@ -109,6 +109,13 @@ async def get_user(user_id: int, db: Session = Depends(get_db), current_user: Us
     
     raise HTTPException(status_code=403, detail="Você não tem permissão para visualizar este usuário")
 
+@router.get("/by-email/{user_email}")
+async def get_user(user_email: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == user_email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=f"Usuário com email {user_email} não encontrado")
+    return True
+
 @router.post("/change-password")
 async def change_password(change_password_req: dict, db: Session = Depends(get_db)):
     email = change_password_req["email"]
