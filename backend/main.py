@@ -15,13 +15,17 @@ app = FastAPI()
 async def root():
     return {"greeting": "Hello, World!", "message": "Welcome to FastAPI!"}
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://kanbanboardweb-production-e73b.up.railway.app", "https://kanbanboardweb.up.railway.app"],  # Lista específica de origens permitidas
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# @app.post("/")
+# async def root():
+#     return {"greeting": "Hello, World!", "message": "Welcome to FastAPI!"}
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["https://kanbanboardweb-production-e73b.up.railway.app", "https://kanbanboardweb.up.railway.app"],  # Lista específica de origens permitidas
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 from api.models.task import Task
 from api.models.user import User
