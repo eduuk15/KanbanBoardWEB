@@ -9,7 +9,10 @@ from api.routes.user import router as user_router
 from api.routes.login import router as login_router
 from api.routes.group import router as group_router
 
-app = FastAPI()
+app = FastAPI(servers=[
+    {"url": "https://kanbanboardweb-production-e73b.up.railway.app", "description": "Prod environment"},
+])
+
 
 @app.get("/")
 async def root():
