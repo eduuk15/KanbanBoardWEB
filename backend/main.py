@@ -15,7 +15,7 @@ async def root():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://kanbanboardweb-production-e73b.up.railway.app"],  # Lista específica de origens permitidas
+    allow_origins=["https://kanbanboardweb-production-e73b.up.railway.app", "https://kanbanboardweb.up.railway.app"],  # Lista específica de origens permitidas
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
