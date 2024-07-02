@@ -2,6 +2,10 @@ import axios, { AxiosInstance } from "axios";
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: "https://kanbanboardweb-production-e73b.up.railway.app",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json", // Você pode adicionar outros cabeçalhos aqui se necessário
+  },
 });
 
 axiosInstance.interceptors.request.use(
