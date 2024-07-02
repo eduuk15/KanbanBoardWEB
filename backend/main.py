@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi.responses import RedirectResponse
 from database.base import Base
 from database.engine import engine
 from api.routes.task import router as task_router
@@ -21,6 +23,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class HTTPSRedirectMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.url.scheme == "http":
+            url = request.url.replace(scheme="https")
+            return RedirectResponse(url)
+        return await call_next(request)
+
+app.add_middleware(HTTPSRedirectMiddleware)
 
 from api.models.task import Task
 from api.models.user import User
