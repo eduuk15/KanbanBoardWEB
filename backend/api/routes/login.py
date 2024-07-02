@@ -7,7 +7,7 @@ from datetime import timedelta
 
 router = APIRouter()
 
-@router.post("/")
+@router.post("/login")
 async def login_user(login_req: dict, db: Session = Depends(get_db)):
     email = login_req['email']
     password = login_req['password']
